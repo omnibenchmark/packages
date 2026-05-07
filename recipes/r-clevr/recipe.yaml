@@ -1,0 +1,53 @@
+context:
+  name: r-clevr
+  version: "0.1.2"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://cran.r-project.org/src/contrib/${{ name }}_${{ version  }}.tar.gz
+  sha256: fdaacd77aa6ac1ec2067b4e717017e034856b154d486fde79663973201ae8764
+
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    - R CMD INSTALL --build .
+
+requirements:
+  host:
+    - r-base >=4.5.0
+    - r-matrix
+    - r-rcpp
+  run:
+    - r-base >=4.5.0
+    - r-matrix
+    - r-rcpp
+
+tests:
+  - script:
+    - Rscript -e "library('clevr')"
+  - script:
+    - Rscript -e "library('clevr'); packageVersion('clevr')"
+
+about:
+  homepage: https://cran.r-project.org/package=clevr
+  summary: Clustering and Link Prediction Evaluation in R
+  description: |
+    Tools for evaluating link prediction and clustering algorithms with respect 
+    to ground truth. Includes efficient implementations of common performance 
+    measures such as pairwise precision/recall, cluster homogeneity/completeness, 
+    variation of information, Rand index etc.
+  license: GPL-2.0-only
+  repository: https://github.com/cleanzr/clevr
+  documentation: https://cran.r-project.org/web/packages/clevr/refman/clevr.html
+
+extra:
+  recipe-maintainers:
+    - markrobinsonuzh
+  #bioconductor:
+  #  package: 
+  #  version: 3.22
