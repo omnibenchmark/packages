@@ -269,9 +269,10 @@ rattler-build upload prefix -c almost-conductor output/noarch/your-package-*.con
 ## Maintainers
 
 This repository is maintained by the lab team. For questions or issues:
+
 - Open an issue in this repository
-- Contact the lab bioinformatics team
-- Check our internal documentation wiki
+- Come to the coffee and code meetup
+
 
 ## License
 
