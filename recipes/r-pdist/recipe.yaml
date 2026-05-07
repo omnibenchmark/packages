@@ -19,9 +19,9 @@ build:
 
 requirements:
   host:
-    - r-base >=4.5.0
+    - r-base >=4.5.0,<4.6.0
   run:
-    - r-base >=4.5.0
+    - r-base >=4.5.0,<4.6.0
 
 tests:
   - script:
