@@ -1,5 +1,5 @@
 context:
-  name: r-clevr
+  name: clevr
   version: "0.1.2"
 
 package:
