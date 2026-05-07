@@ -41,7 +41,7 @@ about:
     Mutual Information) since version 0.1.2, a modified version of ARI (MARI), as described 
     in Sundqvist et al. <doi:10.1007/s00180-022-01230-7> and simple Chi-square distance 
     since version 1.0.0.
-  license: GPL_3
+  license: GPL-3.0-only
   repository: https://github.com/jchiquet/aricode
   documentation: https://cran.r-project.org/web/packages/aricode/refman/aricode.html
 
