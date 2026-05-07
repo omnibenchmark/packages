@@ -22,10 +22,12 @@ requirements:
     - r-base >=4.5.0
     - r-matrix
     - r-rcpp
+    - r-bh
   run:
     - r-base >=4.5.0
     - r-matrix
     - r-rcpp
+    - r-bh
 
 tests:
   - script:
