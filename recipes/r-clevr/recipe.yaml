@@ -1,5 +1,5 @@
 context:
-  name: clevr
+  name: r-clevr
   version: "0.1.2"
 
 package:
@@ -7,7 +7,7 @@ package:
   version: ${{ version }}
 
 source:
-  url: https://cran.r-project.org/src/contrib/${{ name }}_${{ version  }}.tar.gz
+  url: https://cran.r-project.org/src/contrib/clevr_${{ version  }}.tar.gz
   sha256: fdaacd77aa6ac1ec2067b4e717017e034856b154d486fde79663973201ae8764
 
 build:
