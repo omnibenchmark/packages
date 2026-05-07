@@ -1,0 +1,51 @@
+context:
+  name: r-pdist
+  version: "1.2.1"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://cran.r-project.org/src/contrib/pdist_${{ version  }}.tar.gz
+  sha256: 06904ee8c609cebd62553b5593c5d4e08abd3ed95b9f96c64e47c380a2466f2f
+
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    - R CMD INSTALL --build .
+
+requirements:
+  host:
+    - r-base >=4.5.0
+  run:
+    - r-base >=4.5.0
+
+tests:
+  - script:
+    - Rscript -e "library('pdist')"
+  - script:
+    - Rscript -e "library('pdist'); packageVersion('pdist')"
+
+about:
+  homepage: https://cran.r-project.org/package=pdist
+  summary: Partitioned Distance Function
+  description: |
+    Computes the euclidean distance between rows of a matrix X and rows of 
+    another matrix Y. Previously, this could be done by binding the two matrices 
+    together and calling 'dist', but this creates unnecessary computation by 
+    computing the distances between a row of X and another row of X, and likewise 
+    for Y. pdist strictly computes distances across the two matrices, not within 
+    the same matrix, making computations significantly faster for certain use cases.
+  license: GPL-3.0-only
+  repository: https://github.com/jeffwong/pdist
+  documentation: https://cran.r-project.org/web/packages/pdist/refman/pdist.html
+
+extra:
+  recipe-maintainers:
+    - markrobinsonuzh
+  #bioconductor:
+  #  package: 
+  #  version: 3.22
