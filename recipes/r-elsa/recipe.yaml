@@ -1,0 +1,44 @@
+context:
+  name: r-elsa
+  version: "1.1_28"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url:  https://cran.r-project.org/src/contrib/elsa_1.1-28.tar.gz
+  sha256: 7839a0d2f93c4ba9bd07d71f4ae9111ab5ef09ff46c0682436b56ce889125207
+
+build:
+  number: 0
+  string: "0"
+  skip:
+    - win
+  script:
+    - R CMD INSTALL --build .
+
+requirements:
+  host:
+    - r-base >=3.0.0
+    - r-sp >= 1.2-0
+    - r-raster
+  run:
+    - r-base >=3.0.0
+    - r-sp >= 1.2-0
+    - r-raster
+
+tests:
+  - script:
+    - Rscript -e "library('elsa')"
+  - script:
+    - Rscript -e "library('elsa'); packageVersion('elsa')"
+
+about:
+  homepage: https://cran.r-project.org/web/packages/elsa/index.html
+  license: GPL-3.0-or-later
+  repository: https://github.com/babaknaimi/elsa/
+  summary: Entropy-Based Local Indicator of Spatial Association
+  description: |
+    A framework that provides the methods for quantifying entropy-based local indicator of spatial association (ELSA) that can be used for both continuous and categorical data. In addition, this package offers other methods to measure local indicators of spatial associations (LISA). Furthermore, global spatial structure can be measured using a variogram-like diagram, called entrogram. For more information, please check that paper: Naimi, B., Hamm, N. A., Groen, T. A., Skidmore, A. K., Toxopeus, A. G., & Alibakhshi, S. (2019) <doi:10.1016/j.spasta.2018.10.001>.
+
