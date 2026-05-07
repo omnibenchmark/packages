@@ -20,8 +20,12 @@ build:
 requirements:
   host:
     - r-base >=4.5.0
+    - r-matrix
+    - r-rcpp
   run:
     - r-base >=4.5.0
+    - r-matrix
+    - r-rcpp
 
 tests:
   - script:
