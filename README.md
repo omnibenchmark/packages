@@ -155,10 +155,10 @@ rattler-build build --recipe recipes/your-package-name/recipe.yaml
 
 ```bash
 # Install the built package locally
-pixi global install ./output/your-package-name-1.0.0-*.conda
+pixi global install --path ./output/osx-folder/your-package-name-1.0.0-*.conda
 
 # Or with conda/mamba
-conda install -c ./output your-package-name
+conda install -p ./output/osx-folder/your-package-name-1.0.0-*.conda
 ```
 
 ## Contributing Guidelines
