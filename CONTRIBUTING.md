@@ -259,6 +259,18 @@ pixi add your-package-name
 pixi run your-package-name --version
 ```
 
+Or install the built `.conda` artifact directly without setting up a local channel.
+The path under `output/` is platform-specific (`osx-arm64/`, `linux-64/`, `noarch/`,
+etc.) — substitute the one rattler-build wrote for you:
+
+```bash
+# pixi
+pixi global install --path ./output/osx-arm64/your-package-name-1.0.0-*.conda
+
+# conda / mamba
+conda install -p ./output/osx-arm64/your-package-name-1.0.0-*.conda
+```
+
 ### Run Package Tests
 
 If your recipe includes tests, they will run automatically during build. To run them manually:
