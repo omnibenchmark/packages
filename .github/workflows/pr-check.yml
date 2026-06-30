@@ -203,7 +203,8 @@ jobs:
           
           for recipe in ${{ steps.changed-recipes.outputs.recipes }}; do
             echo "::group::Building $recipe"
-            if rattler-build build --recipe recipes/$recipe/recipe.yaml --output-dir output; then
+            if rattler-build build --recipe recipes/$recipe/recipe.yaml --output-dir output \
+                 --channel conda-forge --channel bioconda; then
               echo "✅ $recipe: Build successful"
               success_count=$((success_count + 1))
             else
