@@ -12,7 +12,7 @@ build:
   number: 0
   noarch: generic
   script:
-    - ${{ "\"${R}\" CMD INSTALL --build ." }}
+    - R CMD INSTALL --build .
 requirements:
   host:
     - r-base
@@ -25,7 +25,7 @@ requirements:
     - r-rstiefel
 tests:
   - script:
-      - ${{ "R -e \"library('scGBM'); print(getNamespaceExports('scGBM'))\"" }}
+      - R -e "library('scGBM'); print(getNamespaceExports('scGBM'))"
 about:
   homepage: https://github.com/phillipnicol/scGBM
   summary: Dimensionality reduction for single-cell RNA-seq using generalized bilinear models
