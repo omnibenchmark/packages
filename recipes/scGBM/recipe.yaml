@@ -26,7 +26,6 @@ requirements:
     - r-rstiefel
 tests:
   - script:
-      # R analogue of an import test: load the namespace and list exports.
       - ${{ "R -e \"library('scGBM'); print(getNamespaceExports('scGBM'))\"" }}
 about:
   homepage: https://github.com/phillipnicol/scGBM
