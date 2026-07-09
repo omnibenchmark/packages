@@ -19,6 +19,11 @@ build:
   # Cargo git deps (runorm/rupca/ruanndata) are fetched at build time, so this
   # recipe needs network during build (rattler-build has it by default locally;
   # CI must not pass --offline).
+  # Skip win: rust 1.87 (needed for the edition2024 crate deps) requires
+  # vs_win-64 >=2019, but compiler('c') defaults to vs2017 on win-64 — an
+  # unresolvable MSVC conflict. Same reason r-scshc skips win.
+  skip:
+    - win
   script:
     - python -m pip install . -vv --no-deps --no-build-isolation
 
