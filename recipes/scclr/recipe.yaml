@@ -1,0 +1,56 @@
+context:
+  name: scclr
+  version: "0.1.0"
+  # GitHub-only package (not on PyPI). Pinned to a commit; the archive of a
+  # commit sha is content-stable, unlike branch tarballs.
+  git_rev: 95280146f36d3907dd24ea61e38e60074e776860
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/cleartools/scclr/archive/${{ git_rev }}.tar.gz
+  sha256: 363f127e11b22715877020be31161fb12eb869269e74421a457b0fb0dbd331ce
+
+build:
+  number: 0
+  # ponytail: maturin/pyo3 Rust extension — a compiled build, so not noarch.
+  # Cargo git deps (runorm/rupca/ruanndata) are fetched at build time, so this
+  # recipe needs network during build (rattler-build has it by default locally;
+  # CI must not pass --offline).
+  script:
+    - python -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('rust') }}
+  host:
+    - python >=3.9,<3.14
+    - pip
+    - maturin >=1.5,<2.0
+  run:
+    - python >=3.9,<3.14
+    - numpy
+    - scipy
+
+tests:
+  - python:
+      imports:
+        - scclr
+  - script:
+    - python -c "import scclr; print(scclr.__all__)"
+
+about:
+  homepage: https://github.com/cleartools/scclr
+  summary: Single-cell shifted-CLR (PFlog) normalization + sparse PCA — a scverse drop-in
+  description: |
+    scclr provides single-cell shifted-CLR / PFlog normalization and sparse PCA
+    for Python as a scverse drop-in, built on the Rust crates runorm
+    (normalization) and rupca (sparse PCA) with ruanndata for I/O. It exposes a
+    functional array API over scipy/numpy and an in-place AnnData/MuData API
+    shaped like scanpy (scclr.pp.pflog, scclr.tl.pca).
+  license: BSD-2-Clause
+  license_file: LICENSE
+  repository: https://github.com/cleartools/scclr
