@@ -1,0 +1,41 @@
+# Co-authored-by: Samuel Gunz and Claude Opus 4.8
+context:
+  name: scgbm
+  version: "1.2.0"
+  git_rev: 50f500445112900c4ed03c12bdeb2e6a3df6ae8b
+package:
+  name: r-${{ name }}
+  version: ${{ version }}
+source:
+  url: https://github.com/phillipnicol/scGBM/releases/tag/${{ git_rev }}.tar.gz
+  sha256: fc231e04aa98ee85c81d496bab5a0f8e925abc8e2320e84ef411daea31a5fa90
+build:
+  number: 0
+  noarch: generic
+  script:
+    - ${{ "\"${R}\" CMD INSTALL --build ." }}
+requirements:
+  host:
+    - r-base
+  run:
+    - r-base
+    - r-ggforce
+    - r-ggplot2
+    - r-irlba
+    - r-pheatmap
+    - r-rstiefel
+tests:
+  - script:
+      # R analogue of an import test: load the namespace and list exports.
+      - ${{ "R -e \"library('scGBM'); print(getNamespaceExports('scGBM'))\"" }}
+about:
+  homepage: https://github.com/phillipnicol/scGBM
+  summary: Dimensionality reduction for single-cell RNA-seq using generalized bilinear models
+  description: |
+    scGBM performs model-based dimensionality reduction for single-cell RNA-seq
+    by fitting a Poisson generalized bilinear model (GBM) to the count matrix.
+    It provides a fast projection-based fit (gbm.sc), standard errors for the
+    low-dimensional embedding (get.se), a cluster cohesion index for assessing
+    cluster stability (CCI), and plotting helpers (plot_gbm).
+  license: GPL-2.0-or-later
+  repository: https://github.com/phillipnicol/scGBM
