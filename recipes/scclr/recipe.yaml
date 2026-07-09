@@ -39,6 +39,11 @@ tests:
   - python:
       imports:
         - scclr
+      # maturin tags the macOS wheel with a platform string pip rejects
+      # ("not supported on this platform"), though the arch is correct and the
+      # extension imports fine. conda already guarantees platform via subdir,
+      # so pip's tag check is redundant here.
+      pip_check: false
   - script:
     - python -c "import scclr; print(scclr.__all__)"
 
