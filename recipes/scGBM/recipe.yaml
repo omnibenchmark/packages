@@ -20,14 +20,14 @@ requirements:
     - r-ggplot2
     - r-irlba
     - r-pheatmap
-    - r-rstiefel h60d57d3_1
+    - r-rstiefel *_1
   run:
     - r-base
     - r-ggforce
     - r-ggplot2
     - r-irlba
     - r-pheatmap
-    - r-rstiefel
+    - r-rstiefel *_1
 tests:
   - script:
       - R -e "library('scGBM'); print(getNamespaceExports('scGBM'))"
