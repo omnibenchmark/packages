@@ -12,6 +12,7 @@ build:
   number: 0
   noarch: generic
   script:
+    - rm -f .Rprofile # delete to avoid renv build
     - R CMD INSTALL --build .
 requirements:
   host:
