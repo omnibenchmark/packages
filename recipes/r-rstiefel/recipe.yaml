@@ -14,10 +14,6 @@ build:
   script:
     - R CMD INSTALL --build .
 requirements:
-  build:
-    - ${{ compiler('c') }}
-    - ${{ stdlib('c') }}
-    - ${{ "make" }}
   host:
     - r-base
   run:
