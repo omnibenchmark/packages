@@ -1,0 +1,37 @@
+context:
+  name: rstiefel
+  version: "1.0.1"
+package:
+  name: r-${{ name }}
+  version: ${{ version }}
+source:
+  url: https://cran.r-project.org/src/contrib/${{ name }}_${{ version }}.tar.gz
+  sha256: ef3981285254e389097b06b18894a35b4c6d42a3a69ad942e3857d2ca6917618
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    - R CMD INSTALL --build .
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - ${{ "make" }}
+  host:
+    - r-base
+  run:
+    - r-base
+tests:
+  - script:
+      - R -e "library('rstiefel')"
+about:
+  homepage: https://cran.r-project.org/package=rstiefel
+  summary: Random orthonormal matrix generation and optimization on the Stiefel manifold
+  description: |
+    rstiefel simulates random orthonormal matrices from linear and quadratic
+    exponential family distributions on the Stiefel manifold, including the
+    matrix-variate Bingham-von Mises-Fisher distribution, and provides functions
+    for optimization on the Stiefel manifold under orthogonality constraints.
+  license: GPL-3.0-only
+  repository: https://github.com/cran/rstiefel
