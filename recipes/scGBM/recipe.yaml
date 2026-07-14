@@ -16,6 +16,11 @@ build:
 requirements:
   host:
     - r-base
+    - r-ggforce
+    - r-ggplot2
+    - r-irlba
+    - r-pheatmap
+    - r-rstiefel
   run:
     - r-base
     - r-ggforce
