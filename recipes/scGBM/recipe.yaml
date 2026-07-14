@@ -15,7 +15,7 @@ build:
     - R CMD INSTALL --build .
 requirements:
   host:
-    - r-base
+    - r-base 4.5.*
     - r-ggforce
     - r-ggplot2
     - r-irlba
