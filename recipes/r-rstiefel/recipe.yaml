@@ -20,7 +20,7 @@ requirements:
     - r-base
 tests:
   - script:
-      - R -e "library('rstiefel')"
+      - R -e "library('rstiefel'); packageVersion('rstiefel')"
 about:
   homepage: https://cran.r-project.org/package=rstiefel
   summary: Random orthonormal matrix generation and optimization on the Stiefel manifold
