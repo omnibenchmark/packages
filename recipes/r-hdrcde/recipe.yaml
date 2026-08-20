@@ -1,0 +1,54 @@
+# Same osx-arm64 gap as r-ash: conda-forge has no Apple-silicon build.
+context:
+  name: hdrcde
+  version: "3.5.0"
+
+package:
+  name: r-${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://cran.r-project.org/src/contrib/${{ name }}_${{ version }}.tar.gz
+  sha256: 3affe9cafe987fd0973b54ed50a423de60ec6412aa1416733543448cddc5b32a
+
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    - R CMD INSTALL --build .
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('fortran') }}
+  host:
+    - r-base 4.5.*
+    - r-locfit
+    - r-ash
+    - r-ks
+    - r-kernsmooth
+    - r-ggplot2
+    - r-rcolorbrewer
+  run:
+    - r-base 4.5.*
+    - r-locfit
+    - r-ash
+    - r-ks
+    - r-kernsmooth
+    - r-ggplot2
+    - r-rcolorbrewer
+
+tests:
+  - script:
+    - Rscript -e "library('hdrcde')"
+  - script:
+    - Rscript -e "library('hdrcde'); packageVersion('hdrcde')"
+
+about:
+  homepage: https://pkg.robjhyndman.com/hdrcde/
+  license: GPL-3.0-only
+  repository: https://github.com/robjhyndman/hdrcde
+  summary: Highest Density Regions and Conditional Density Estimation
+  description: |
+    Computation of highest density regions in one and two dimensions, kernel estimation of univariate density functions conditional on one covariate, and multimodal regression.

@@ -1,0 +1,41 @@
+# conda-forge builds r-ash for every subdir except osx-arm64, which blocks
+# r-rainbow -> r-fds -> r-fda -> r-fda.usc on Apple silicon.
+context:
+  name: ash
+  version: "1.0_15"
+
+package:
+  name: r-${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://cran.r-project.org/src/contrib/${{ name }}_1.0-15.tar.gz
+  sha256: 8b0a7bc39dd0ce2172f09edc5b5e029347d041a4d508bbff3f3fd6f69450c2ab
+
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    - R CMD INSTALL --build .
+
+requirements:
+  build:
+    - ${{ compiler('fortran') }}
+  host:
+    - r-base 4.5.*
+  run:
+    - r-base 4.5.*
+
+tests:
+  - script:
+    - Rscript -e "library('ash')"
+  - script:
+    - Rscript -e "library('ash'); packageVersion('ash')"
+
+about:
+  homepage: https://cran.r-project.org/package=ash
+  license: GPL-2.0-or-later
+  summary: David Scott's ASH Routines
+  description: |
+    David Scott's ASH routines ported from S-PLUS to R: average shifted histogram density estimation in one and two dimensions.
