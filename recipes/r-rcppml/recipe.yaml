@@ -1,0 +1,75 @@
+context:
+  name: rcppml
+  version: "1.0.0"
+  # conda-forge stops at 0.3.7.1, which predates svd()/pca() and the
+  # lanczos/krylov backends. Pinned to the v1.0.0 commit; a commit-sha archive
+  # is content-stable, unlike a branch tarball.
+  git_rev: df69dddbe37962cd0179b6b6c6ace94e400b4f60
+
+package:
+  name: r-${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/zdebruine/RcppML/archive/${{ git_rev }}.tar.gz
+  sha256: 332ae91b95142180c3c29fa967755d41c568db1418ddbd621d6bee6364846393
+
+build:
+  number: 0
+  # CUDA build: linux-64 only. Upstream ships no Windows GPU path and macOS has
+  # no CUDA at all.
+  skip:
+    - not linux
+  script: build.sh
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    # 12.8 is the newest toolkit that accepts conda-forge's default gcc.
+    - cuda-nvcc 12.8.*
+    - make
+  host:
+    - r-base 4.5.*
+    - r-matrix
+    - r-rcpp
+    - r-rcppeigen
+    - cuda-version 12.8.*
+    - cuda-cudart-dev
+    - cuda-driver-dev   # libcuda.so stub; the real driver comes from the host
+    - libcublas-dev
+    - libcusparse-dev
+    - libcusolver-dev
+  run:
+    - r-base
+    - r-matrix
+    - r-rcpp
+
+tests:
+  - script:
+      - R -e "library('RcppML'); stopifnot(packageVersion('RcppML') >= '1.0.0')"
+      # The whole point of this recipe: without it we ship a CPU-only build that
+      # silently falls back. gpu_available() is FALSE on a GPU-less builder, so
+      # assert on the artifact instead.
+      - R -e "p <- system.file('lib', 'RcppML_gpu.so', package = 'RcppML'); stopifnot(nzchar(p)); cat(p, '\n')"
+      - R -e "cat(readLines(system.file('build_config', package = 'RcppML')), sep = '\n')"
+      - R -e "stopifnot(isFALSE(RcppML::gpu_available()) || isTRUE(RcppML::gpu_available()))"
+
+about:
+  homepage: https://github.com/zdebruine/RcppML
+  summary: Fast NMF, SVD and divisive clustering for large sparse matrices, with CUDA acceleration
+  description: |
+    RcppML provides high-performance non-negative matrix factorization (NMF),
+    truncated SVD/PCA (lanczos, krylov, irlba, randomized, deflation solvers)
+    and divisive clustering for large sparse and dense matrices, using
+    alternating least squares with coordinate descent and Cholesky NNLS
+    solvers, multiple distribution-based losses via IRLS, and L1/L2/L21/angular
+    /graph-Laplacian regularization.
+
+    This build is compiled against the CUDA toolkit and ships the optional
+    RcppML_gpu.so bridge, so `resource = "gpu"` actually runs on a GPU instead
+    of warning and falling back to the CPU. On a host without a CUDA driver the
+    bridge simply fails to load and `gpu_available()` returns FALSE — every CPU
+    code path still works.
+  license: GPL-3.0-or-later
+  repository: https://github.com/zdebruine/RcppML
