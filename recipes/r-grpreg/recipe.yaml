@@ -1,15 +1,15 @@
 context:
-  build_number: '0'
+  build_number: 0
 
 package:
   name: r-grpreg
   version: 3.6.0
 
 source:
-- url:
-  - https://cran.r-project.org/src/contrib/grpreg_3.6.0.tar.gz
-  - https://cran.r-project.org/src/contrib/Archive/grpreg_3.6.0.tar.gz
-  sha256: 1270e87b7d44913de44295b35ba58a19d946ecd54b072232d6b2b5ff85e2ed8d
+  - url:
+      - https://cran.r-project.org/src/contrib/grpreg_3.6.0.tar.gz
+      - https://cran.r-project.org/src/contrib/Archive/grpreg/grpreg_3.6.0.tar.gz
+    sha256: 1270e87b7d44913de44295b35ba58a19d946ecd54b072232d6b2b5ff85e2ed8d
 
 build:
   number: ${{ build_number }}
@@ -17,48 +17,37 @@ build:
     - if: win
       then: R CMD INSTALL --build . %R_ARGS%
       else: R CMD INSTALL --build . ${R_ARGS}
-  noarch: generic
 
 requirements:
   build:
-  - if: build_platform != target_platform
-    then:
-      - cross-r-base ${{ r_base }}
-  - ${{ compiler('c') }}
-  - ${{ compiler('cxx') }}
-  - make
+    - if: win
+      then:
+        - gcc_win-64
+        - gxx_win-64
+        - m2-base
+        - m2-make
+      else:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - make
+
   host:
-  - r-base
-  - r-matrix
+    - r-base 4.5.*
+    - r-matrix
+
   run:
-  - r-base
-  - r-matrix
-  # -  r-knitr  # suggested
-  # -  r-rmarkdown  # suggested
-  # -  r-survival  # suggested
-  # -  r-tinytest  # suggested
+    - r-base 4.5.*
+    - r-matrix
 
 tests:
-- script:
-  - Rscript -e 'library("grpreg")'
+  - script:
+      - Rscript -e 'library("grpreg")'
 
 about:
   homepage: https://pbreheny.github.io/grpreg/
-  summary: |-
-    Regularization Paths for Regression Models with Grouped
-    Covariates
+  summary: Regularization Paths for Regression Models with Grouped Covariates
   description: |-
-    Efficient algorithms for fitting the regularization path
-    of linear regression, GLM, and Cox regression models with
-    grouped penalties.  This includes group selection methods such
-    as group lasso, group MCP, and group SCAD as well as bi-level
-    selection methods such as the group exponential lasso, the
-    composite MCP, and the group bridge.  For more information, see
-    Breheny and Huang (2009) <doi:10.4310/sii.2009.v2.n3.a10>,
-    Huang, Breheny, and Ma (2012) <doi:10.1214/12-sts392>, Breheny
-    and Huang (2015) <doi:10.1007/s11222-013-9424-2>, and Breheny
-    (2015) <doi:10.1111/biom.12300>, or visit the package homepage
-    <https://pbreheny.github.io/grpreg/>.
+    Efficient algorithms for fitting the regularization path of linear
+    regression, GLM, and Cox regression models with grouped penalties.
   license: GPL-3.0-only
   repository: https://github.com/cran/grpreg
-
