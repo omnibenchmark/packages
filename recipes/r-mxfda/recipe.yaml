@@ -1,0 +1,75 @@
+context:
+  build_number: 0
+
+package:
+  name: r-mxfda
+  version: 0.2.2.1
+
+source:
+- url:
+  - https://cran.r-project.org/src/contrib/mxfda_0.2.2-1.tar.gz
+  - https://cran.r-project.org/src/contrib/Archive/mxfda_0.2.2-1.tar.gz
+  sha256: 5d9abff118643fa3015cefab2ee4d83c9a58ad89c251267300d118cbca231022
+
+build:
+  number: ${{ build_number }}
+  script:
+    - if: win
+      then: R CMD INSTALL --build . %R_ARGS%
+      else: R CMD INSTALL --build . ${R_ARGS}
+  noarch: generic
+
+requirements:
+  host:
+  - r-base >=4.0.0
+  - r-magrittr
+  - r-rlang
+  - r-tidyr
+  - r-purrr
+  - r-dplyr
+  - r-ggplot2
+  - r-lifecycle
+  - r-refund >=0.1-35
+  - r-reshape2
+  - r-mgcv
+  - r-spatstat.geom
+  - r-spatstat.explore
+  - r-spatentropy
+  - r-simdesign
+  run:
+  - r-base >=2.10
+  - r-magrittr
+  - r-rlang
+  - r-tidyr
+  - r-purrr
+  - r-dplyr
+  - r-ggplot2
+  - r-lifecycle
+  - r-refund >=0.1-35
+  - r-reshape2
+  - r-mgcv
+  - r-spatstat.geom
+  - r-spatstat.explore
+  - r-spatentropy
+  - r-simdesign
+
+tests:
+- script:
+  - Rscript -e 'library("mxfda")'
+
+about:
+  homepage: https://github.com/julia-wrobel/mxfda/
+  summary: A Functional Data Analysis Package for Spatial Single Cell Data
+  description: |-
+    Methods and tools for deriving spatial summary functions
+    from single-cell imaging data and performing functional data
+    analyses. Functions can be applied to other single-cell
+    technologies such as spatial transcriptomics. Functional
+    regression and functional principal component analysis methods
+    are in the 'refund' package
+    <https://cran.r-project.org/package=refund> while calculation
+    of the spatial summary functions are from the 'spatstat'
+    package <https://spatstat.org/>.
+  license: MIT
+  repository: https://github.com/cran/mxfda
+
