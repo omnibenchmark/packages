@@ -26,8 +26,8 @@ requirements:
 
     - if: win
       then:
-        - ${{ compiler('m2w64_c') }}
-        - ${{ compiler('m2w64_cxx') }}
+        - gcc_win-64
+        - gxx_win-64
       else:
         - ${{ compiler('c') }}
         - ${{ compiler('cxx') }}
@@ -47,7 +47,7 @@ requirements:
     - r-lme4 >=1.1
     - r-mgcv
     - r-nlme
-    
+
 tests:
 - script:
   - Rscript -e 'library("RLRsim")'
