@@ -1,0 +1,61 @@
+context:
+  build_number: '0'
+
+package:
+  name: r-rlrsim
+  version: 3.1.9
+
+source:
+- url:
+  - https://cran.r-project.org/src/contrib/RLRsim_3.1-9.tar.gz
+  - https://cran.r-project.org/src/contrib/Archive/RLRsim_3.1-9.tar.gz
+  sha256: f76b60eb0893b0afc4079d1e8a857fcf78e436b00800f6663ea2ba25dc2863f5
+
+build:
+  number: ${{ build_number }}
+  script:
+    - if: win
+      then: R CMD INSTALL --build . %R_ARGS%
+      else: R CMD INSTALL --build . ${R_ARGS}
+  noarch: generic
+
+requirements:
+  build:
+  - if: build_platform != target_platform
+    then:
+      - cross-r-base ${{ r_base }}
+  - ${{ compiler('c') }}
+  - ${{ compiler('cxx') }}
+  - make
+  host:
+  - r-base
+  - r-rcpp
+  - r-rcpp >=0.11.1
+  - r-lme4 >=1.1
+  - r-mgcv
+  - r-nlme
+  run:
+  - r-base
+  - r-rcpp >=0.11.1
+  - r-lme4 >=1.1
+  - r-mgcv
+  - r-nlme
+
+tests:
+- script:
+  - Rscript -e 'library("RLRsim")'
+
+about:
+  homepage: https://github.com/fabian-s/RLRsim
+  summary: |-
+    Exact (Restricted) Likelihood Ratio Tests for Mixed and Additive
+    Models
+  description: |-
+    Rapid, simulation-based exact (restricted) likelihood
+    ratio tests for testing the presence of variance
+    components/nonparametric terms for models fit with
+    nlme::lme(),lme4::lmer(), lmerTest::lmer(), gamm4::gamm4() and
+    mgcv::gamm().
+  license: GPL-2.0-only OR GPL-3.0-only
+  repository: https://github.com/cran/RLRsim
+
