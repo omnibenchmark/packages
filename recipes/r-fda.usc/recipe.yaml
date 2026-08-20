@@ -1,0 +1,59 @@
+context:
+  name: fda.usc
+  version: "2.2.0"
+
+package:
+  name: r-${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://cran.r-project.org/src/contrib/${{ name }}_${{ version }}.tar.gz
+  sha256: 491325e8f0edc515f099c560ca063157a82f25c9eeb11101b15f916bfb00bc12
+
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    - R CMD INSTALL --build .
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('fortran') }}
+  host:
+    - r-base >=4.5.0
+    - r-fda
+    - r-mass
+    - r-mgcv
+    - r-knitr
+    - r-nlme
+    - r-doparallel
+    - r-iterators
+    - r-foreach
+    - r-ksamples
+  run:
+    - r-base >=4.5.0
+    - r-fda
+    - r-mass
+    - r-mgcv
+    - r-knitr
+    - r-nlme
+    - r-doparallel
+    - r-iterators
+    - r-foreach
+    - r-ksamples
+
+tests:
+  - script:
+    - Rscript -e "library('fda.usc')"
+  - script:
+    - Rscript -e "library('fda.usc'); packageVersion('fda.usc')"
+
+about:
+  homepage: https://cran.r-project.org/package=fda.usc
+  license: GPL-2.0-only
+  repository: https://github.com/moviedo5/fda.usc
+  summary: Functional Data Analysis and Utilities for Statistical Computing
+  description: |
+    Routines for exploratory and descriptive analysis of functional data such as depth measurements, atypical curves detection, regression models, supervised classification, unsupervised classification and functional analysis of variance.
