@@ -17,7 +17,6 @@ build:
     - if: win
       then: R CMD INSTALL --build . %R_ARGS%
       else: R CMD INSTALL --build . ${R_ARGS}
-  noarch: generic
 
 requirements:
   build:
