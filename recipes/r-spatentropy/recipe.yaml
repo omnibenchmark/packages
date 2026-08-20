@@ -61,7 +61,5 @@ about:
     updated version works with the updated 'spatstat' package (>=
     3.0-2).
   license: GPL-3.0-only
-  license_file:
-  - ${{ PREFIX }}/lib/R/share/licenses/GPL-3
   repository: https://github.com/cran/SpatEntropy
 
