@@ -1,14 +1,14 @@
 context:
   name: bioconductor-rhdf5lib
-  version: "1.32.0"
+  version: "2.0.0"
 
 package:
   name: ${{ name }}
   version: ${{ version }}
 
 source:
-  url: https://bioconductor.org/packages/3.22/bioc/src/contrib/Rhdf5lib_${{ version }}.tar.gz
-  sha256: be6e080b0f8c91eea2761cb10b910036c00bcad6866dc4d285411a7ca4400fc4
+  url: https://bioconductor.org/packages/3.23/bioc/src/contrib/Rhdf5lib_${{ version }}.tar.gz
+  sha256: a6acd3536f4aca697d9c35dec43412d8ec4653bcdbad2b6d863977ad1ce11f82
 
 build:
   number: 0
@@ -24,7 +24,7 @@ requirements:
     - make
   host:
     - r-base >=4.2.0
-    - zlib
+    - bioconductor-biocmake =1.4.0
   run:
     - r-base >=4.2.0
 
@@ -49,4 +49,4 @@ extra:
     - btraven00
   bioconductor:
     package: Rhdf5lib
-    version: 3.22
+    version: 3.23
