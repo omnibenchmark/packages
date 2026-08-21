@@ -1,0 +1,55 @@
+context:
+  name: SpaceANOVA
+  version: "0.1.0"
+  build_number: 0
+
+package:
+  name: r-spaceanova
+  version: ${{ version }}
+
+source:
+  git: https://github.com/sealx017/SpaceANOVA.git
+  branch: main
+
+build:
+  number: ${{ build_number }}
+  noarch: generic
+  script:
+    - if: win
+      then: R CMD INSTALL --build . %R_ARGS%
+      else: R CMD INSTALL --build . ${R_ARGS}
+
+requirements:
+  host:
+    - r-base 4.5.*
+    - r-spatstat
+    - r-tidyr
+    - r-dplyr
+    - r-fda.usc
+    - r-pheatmap
+    - r-ggplot2
+    - r-cowplot
+
+  run:
+    - r-base 4.5.*
+    - r-spatstat
+    - r-tidyr
+    - r-dplyr
+    - r-fda.usc
+    - r-pheatmap
+    - r-ggplot2
+    - r-cowplot
+
+tests:
+  - script:
+      - Rscript -e 'library("SpaceANOVA")'
+
+
+about:
+  homepage: https://github.com/sealx017/SpaceANOVA
+  repository: https://github.com/sealx017/SpaceANOVA
+  license: GPL-2.0-only
+  summary: Differential Spatial Co-occurrence Analysis
+  description: |-
+    The package can be used to test if pairs of cell types exhibit differential 
+    spatial co-occurrence patterns across multiple groups
