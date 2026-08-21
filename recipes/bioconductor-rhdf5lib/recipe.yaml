@@ -25,6 +25,7 @@ requirements:
   host:
     - r-base >=4.2.0
     - bioconductor-biocmake =1.4.0
+    - zlib
   run:
     - r-base >=4.2.0
 
