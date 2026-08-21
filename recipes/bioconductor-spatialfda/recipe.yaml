@@ -1,0 +1,69 @@
+context:
+  version: "1.5.1"
+  commit: "0a191f40c488ed4bd259f81815aa156dfb487389"
+
+package:
+  name: bioconductor-spatialfda
+  version: ${{ version }}
+
+source:
+  #this is currently the newest build from github
+  #once this is reflected in bioconductor.org we might update the URL
+  url: https://github.com/mjemons/spatialFDA/archive/${{ commit }}.tar.gz
+  sha256: b62cc0c63639f22cd8e4fa15c27be06c70c089d9a08326c43e37099c84162474
+
+build:
+  number: 0
+  noarch: generic
+  script: R CMD INSTALL --build . ${R_ARGS}
+
+requirements:
+  host:
+    - r-base >=4.3
+    - r-dplyr
+    - r-ggplot2
+    - r-patchwork
+    - r-purrr
+    - r-refund
+    - bioconductor-spatialexperiment
+    - r-spatstat.explore
+    - r-spatstat.geom
+    - bioconductor-summarizedexperiment
+    - r-fda
+    - r-tidyr
+    - bioconductor-experimenthub
+    - r-scales
+    - bioconductor-s4vectors
+    - r-mgcv
+
+  run:
+    - r-base >=4.3
+    - r-dplyr
+    - r-ggplot2
+    - r-patchwork
+    - r-purrr
+    - r-refund
+    - bioconductor-spatialexperiment
+    - r-spatstat.explore
+    - r-spatstat.geom
+    - bioconductor-summarizedexperiment
+    - r-fda
+    - r-tidyr
+    - bioconductor-experimenthub
+    - r-scales
+    - bioconductor-s4vectors
+    - r-mgcv
+
+tests:
+  - script:
+      - R -e "library(spatialFDA)"
+
+about:
+  homepage: https://github.com/mjemons/spatialFDA
+  license: GPL-3.0-or-later
+  summary: A Tool for Spatial Multi-sample Comparisons
+  description: |
+    spatialFDA is a package to calculate spatial statistics metrics. 
+    The package takes a SpatialExperiment object and calculates spatial statistics metrics using the package spatstat.
+    Then it compares the resulting functions across samples/conditions using functional additive models as implemented in the package refund. 
+    Furthermore, it provides exploratory visualisations using functional principal component analysis, as well implemented in refund.
