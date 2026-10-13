@@ -1,0 +1,7 @@
+# Compiled pybind11 extension → one build per CPython ABI. Without this the
+# solver picks the newest python only, and the package is uninstallable in
+# any env pinned to an older interpreter. requires-python is >=3.11.
+python:
+  - "3.11"
+  - "3.12"
+  - "3.13"

@@ -1,0 +1,88 @@
+context:
+  name: pygenstability
+  # PyPI 0.2.7 is stale; master has moved on (src/ layout, PEP 621 metadata)
+  # without a new release. Pinned to a commit on master; a commit-sha archive
+  # is content-stable, unlike a branch tarball. `.postN` = N commits past the
+  # 0.2.7 tag, so a real 0.2.8 release sorts above this build.
+  version: "0.2.7.post5"
+  git_rev: b08d0dc6a9eadc2cc4b70321196e0e9f57d56741
+  # generalizedLouvain is a git submodule (the C++ optimiser). GitHub archives
+  # omit submodules, so it is fetched separately at the commit the superproject
+  # pins (`git ls-tree <git_rev> generalizedLouvain`).
+  louvain_rev: 8c9f1f2253d0b9d3c4469f02391b1f46caca2470
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/barahona-research-group/PyGenStability/archive/${{ git_rev }}.tar.gz
+    sha256: a2558d20401def8461153a5c9517bf6c4a570a955347c807929346eed4d04d38
+  - url: https://github.com/michaelschaub/generalizedLouvain/archive/${{ louvain_rev }}.tar.gz
+    sha256: b53909294d4fdfdf0227764accd7bffcc2d9cac782cd3e051c5de7a102085e77
+    target_directory: generalizedLouvain
+
+build:
+  number: 0
+  # pybind11 C++ extension (generalized_louvain) — compiled, so not noarch.
+  # setup.py hardcodes -std=c++11, which MSVC rejects; the extension is marked
+  # optional=True so a win build would silently ship without it. Skip win.
+  skip:
+    - win
+  script:
+    - python -m pip install . -vv --no-deps --no-build-isolation
+  python:
+    entry_points:
+      - pygenstability = pygenstability.app:cli
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+  host:
+    - python
+    - pip
+    - setuptools
+    - wheel
+    - cython
+    - numpy
+    - pybind11 >=2.6.0
+  run:
+    - python >=3.11
+    - numpy >=1.18.1,<3
+    - scipy >=1.4.1,<2
+    - matplotlib-base >=3.1.3
+    - scikit-learn
+    - click >=7.0
+    - tqdm >=4.45.0
+    - pandas >=1.0.0
+    - threadpoolctl
+    # upstream calls networkx "optional" but app.py (the CLI entry point) imports it unconditionally
+    - networkx >=3.0
+
+tests:
+  - python:
+      imports:
+        - pygenstability
+      # upstream lists cmake and pybind11 as *runtime* deps, but nothing in
+      # src/ imports them; they are build-time only. Not shipping them at
+      # runtime, so pip's metadata check would complain.
+      pip_check: false
+  - script:
+      # setup.py marks the extension optional=True, and `import
+      # pygenstability.generalized_louvain` succeeds even without the .so
+      # (the source dir is a namespace package). Check for a symbol instead.
+      - python -c "from pygenstability import generalized_louvain as g; g.run_louvain"
+      - pygenstability --help
+
+about:
+  homepage: https://github.com/barahona-research-group/PyGenStability
+  repository: https://github.com/barahona-research-group/PyGenStability
+  documentation: https://barahona-research-group.github.io/PyGenStability/
+  summary: Python binding of generalised Louvain with Markov Stability
+  description: |
+    PyGenStability performs multiscale community detection with Markov
+    Stability analysis, using a generalised Louvain optimiser (pybind11 C++
+    extension) and optional Leiden backend. Includes constructors for several
+    graph quality functions and automatic selection of robust scales.
+  license: GPL-3.0-only
+  license_file: LICENSE
