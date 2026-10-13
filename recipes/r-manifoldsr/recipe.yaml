@@ -1,0 +1,71 @@
+context:
+  name: manifoldsR
+  version: "0.3.8"
+  # GitHub-only (not on CRAN/conda-forge); a hard dependency of r-bixverse.
+  # Pinned to the v0.3.8 tag commit; a commit-sha archive is content-stable.
+  git_rev: 3fe79143316192c6f9b58a1a06eb31098949f44f
+
+package:
+  name: r-manifoldsr
+  version: ${{ version }}
+
+source:
+  url: https://github.com/GregorLueg/manifoldsR/archive/${{ git_rev }}.tar.gz
+  sha256: 6099666c30014a4d4f00f1180c6d73ed53f9ad37847d8c2572706f89b7b739e3
+
+build:
+  number: 0
+  # extendr (Rust) static lib linked into the R .so — compiled, not noarch.
+  # Cargo fetches crates.io deps at build time, so the build needs network
+  # (CI must not pass --offline). Skip win: extendr needs a -pc-windows-gnu
+  # toolchain, which conda's MSVC-based rust/R stack does not provide.
+  skip:
+    - win
+  script:
+    # conda's rust activation exports CARGO_BUILD_TARGET=<triple>, which makes
+    # cargo emit into target/<triple>/release/ while the package's Makevars
+    # links from target/release/ (host build, no triple). Unset it.
+    - unset CARGO_BUILD_TARGET
+    - R CMD INSTALL --build .
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('rust') }}
+    - make
+  host:
+    - r-base 4.5.*
+    - r-checkmate
+    - r-data.table
+    - r-ggplot2
+    - r-lifecycle
+    - r-magrittr
+    - r-purrr
+    - r-rextendr
+    - r-zeallot
+  run:
+    - r-base 4.5.*
+    - r-checkmate
+    - r-data.table
+    - r-ggplot2
+    - r-lifecycle
+    - r-magrittr
+    - r-purrr
+    - r-rextendr
+    - r-zeallot
+
+tests:
+  - script:
+      - Rscript -e 'library("manifoldsR"); print(packageVersion("manifoldsR"))'
+
+about:
+  homepage: https://gregorlueg.github.io/manifoldsR/
+  repository: https://github.com/GregorLueg/manifoldsR
+  summary: Rust-accelerated 2D embeddings (UMAP, tSNE, PHATE, PaCMAP, diffusion maps) and kNN graphs
+  description: |
+    manifoldsR provides methods to generate low-dimensional embeddings such as
+    UMAP, tSNE, PHATE, PaCMAP and diffusion maps, nearest-neighbour graph
+    construction, and embedding-based clustering (EVoC) plus k-means, all
+    implemented in Rust via extendr.
+  license: MIT
+  license_file: LICENSE.md

@@ -117,6 +117,8 @@ jobs:
             "bioconductor-scrapper"
             "r-ash"
             "r-hdrcde"
+            "r-manifoldsr"
+            "r-bixverse"
           )
 
           RECIPES_JSON='${{ needs.detect-changes.outputs.recipes }}'

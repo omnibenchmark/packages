@@ -1,0 +1,114 @@
+context:
+  name: bixverse
+  version: "0.6.3"
+  # GitHub-only (not on CRAN/conda-forge). Pinned to the v0.6.3 tag commit; a
+  # commit-sha archive is content-stable, unlike a branch tarball.
+  git_rev: 462b9ead0d3067a96aa10df5aef50a10764f4dec
+
+package:
+  name: r-bixverse
+  version: ${{ version }}
+
+source:
+  url: https://github.com/GregorLueg/bixverse/archive/${{ git_rev }}.tar.gz
+  sha256: e367fb9987bf211b25fd99476f5b34399ff55cb432f34e624012f75cfac67457
+
+build:
+  number: 0
+  # extendr (Rust) static lib linked into the R .so — compiled, not noarch.
+  # Cargo fetches crates.io deps at build time, so the build needs network
+  # (CI must not pass --offline). HDF5 is built from source by the
+  # hdf5-metno-src crate (upstream default feature), which shells out to cmake.
+  # Skip win: extendr needs a -pc-windows-gnu toolchain, which conda's
+  # MSVC-based rust/R stack does not provide.
+  skip:
+    - win
+  script:
+    # conda's rust activation exports CARGO_BUILD_TARGET=<triple>, which makes
+    # cargo emit into target/<triple>/release/ while the package's Makevars
+    # links from target/release/ (host build, no triple). Unset it.
+    - unset CARGO_BUILD_TARGET
+    - R CMD INSTALL --build .
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('rust') }}
+    - make
+    - cmake
+  host:
+    - r-base 4.5.*
+    - r-arrow
+    - r-checkmate
+    - r-cli
+    - r-data.table
+    - r-dbi
+    - r-dplyr
+    - r-duckdb >=1.5.5
+    - r-fastcluster
+    - r-ggplot2
+    - r-igraph
+    - r-jsonlite
+    - r-lifecycle
+    - r-magrittr
+    - r-manifoldsr >=0.3.5
+    - r-matrixstats
+    - r-matrix
+    - r-mirai
+    - r-patchwork
+    - r-purrr
+    - r-r.utils
+    - r-r6
+    - r-rextendr
+    - bioconductor-rhdf5
+    - r-rlang
+    - r-s7
+    - r-stringr
+    - r-zeallot
+  run:
+    - r-base 4.5.*
+    - r-arrow
+    - r-checkmate
+    - r-cli
+    - r-data.table
+    - r-dbi
+    - r-dplyr
+    - r-duckdb >=1.5.5
+    - r-fastcluster
+    - r-ggplot2
+    - r-igraph
+    - r-jsonlite
+    - r-lifecycle
+    - r-magrittr
+    - r-manifoldsr >=0.3.5
+    - r-matrixstats
+    - r-matrix
+    - r-mirai
+    - r-patchwork
+    - r-purrr
+    - r-r.utils
+    - r-r6
+    - r-rextendr
+    - bioconductor-rhdf5
+    - r-rlang
+    - r-s7
+    - r-stringr
+    - r-zeallot
+
+tests:
+  - script:
+      - Rscript -e 'library("bixverse"); print(packageVersion("bixverse"))'
+
+about:
+  homepage: https://gregorlueg.github.io/bixverse
+  repository: https://github.com/GregorLueg/bixverse
+  summary: Rust-accelerated bioinformatics and computational biology workflows
+  description: |
+    bixverse provides fast implementations of common bioinformatics and
+    computational biology methods via Rust: gene set enrichment methods,
+    graph-based methods, co-expression module detection, differential gene
+    expression helpers, and a single-cell analysis suite for million-cell
+    scale analysis on local compute.
+  license: MIT
+  license_file: LICENSE
