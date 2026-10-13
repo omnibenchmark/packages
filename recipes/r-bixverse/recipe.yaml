@@ -28,6 +28,10 @@ build:
     # cargo emit into target/<triple>/release/ while the package's Makevars
     # links from target/release/ (host build, no triple). Unset it.
     - unset CARGO_BUILD_TARGET
+    # extendr's wrapper generator (`cargo run --bin document`) links libR
+    # dynamically and gets no rpath, so on a clean CI runner it fails to load.
+    # Makevars appends to RUSTFLAGS, so an rpath set here is picked up.
+    - export RUSTFLAGS="${RUSTFLAGS:-} -C link-arg=-Wl,-rpath,$PREFIX/lib/R/lib"
     - R CMD INSTALL --build .
 
 requirements:

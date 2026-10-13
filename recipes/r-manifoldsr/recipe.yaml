@@ -26,6 +26,16 @@ build:
     # cargo emit into target/<triple>/release/ while the package's Makevars
     # links from target/release/ (host build, no triple). Unset it.
     - unset CARGO_BUILD_TARGET
+    # extendr's wrapper generator (`cargo run --bin document`) links libR
+    # dynamically and gets no rpath, so on a clean CI runner it fails to load.
+    # Makevars appends to RUSTFLAGS, so an rpath set here is picked up.
+    - export RUSTFLAGS="${RUSTFLAGS:-} -C link-arg=-Wl,-rpath,$PREFIX/lib/R/lib"
+    - if: osx
+      then:
+        # manifolds-rs' fft_tsne pulls fftw-src, which configures a bundled FFTW
+        # 3.3.8 whose 2016 config.sub rejects `arm64-apple-*`. Presetting
+        # autoconf's cached build triple skips config.sub entirely.
+        - export ac_cv_build="${HOST/arm64/aarch64}" ac_cv_host="${HOST/arm64/aarch64}"
     - R CMD INSTALL --build .
 
 requirements:
