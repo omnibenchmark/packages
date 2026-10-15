@@ -1,0 +1,56 @@
+context:
+  name: gve-leiden
+  # Upstream has no release at this commit (it is 16 commits past tag 2.0.0, on a diverged branch);
+  # the version is the commit date. It is the commit clust-libreville-rs and brrr-gve benchmark against.
+  version: "0.0.20250408"
+  git_rev: f741a40717a1b207d53289c5cdda36ce858477a7
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/puzzlef/leiden-communities-openmp/archive/${{ git_rev }}.tar.gz
+  sha256: 85b133388d451c50e756e0c83c2c1a873d060942151bfe053e121d72647f56ad
+
+build:
+  number: 0
+  # ponytail: no win (OpenMP and GVE's GCC/Clang-isms under MSVC untested); add if needed
+  skip:
+    - win
+  script:
+    - mkdir -p $PREFIX/bin $PREFIX/include/gve-leiden
+    - cp -r inc $PREFIX/include/gve-leiden/
+    # -O3 after CXXFLAGS (which carry -O2), as upstream and brrr-gve build it
+    - $CXX $CXXFLAGS -std=c++17 -O3 -fopenmp -I. -o $PREFIX/bin/gve-leiden $RECIPE_DIR/gve_leiden_cli.cxx $LDFLAGS
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+  host:
+    - if: osx
+      then: llvm-openmp
+
+tests:
+  - files:
+      recipe:
+        - test_two_triangles.py
+    requirements:
+      run:
+        - python
+        - numpy
+    script:
+      - python test_two_triangles.py
+
+about:
+  homepage: https://github.com/puzzlef/leiden-communities-openmp
+  repository: https://github.com/puzzlef/leiden-communities-openmp
+  license: MIT
+  license_file: LICENSE
+  summary: GVE-Leiden, a fast parallel (OpenMP) Leiden, with a command-line driver on a CSR graph
+  description: |
+    GVE-Leiden (Sahu, ICPP 2024, doi:10.1145/3673038.3673146, arXiv:2312.13936): the header-only
+    library (include/gve-leiden/inc) and `gve-leiden GRAPH.bin LABELS.bin`, a driver that runs
+    leidenStaticOmp at resolution 1 on a binary CSR graph and writes the labels. Used as the
+    performance and reproducibility baseline of clust-libreville-rs (deterministic Leiden) and
+    brrr-gve. Threads: OMP_NUM_THREADS.
