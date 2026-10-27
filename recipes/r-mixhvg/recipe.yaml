@@ -1,0 +1,53 @@
+context:
+  build_number: '0'
+
+package:
+  name: r-mixhvg
+  version: 1.0.1
+
+source:
+- url:
+  - https://cran.r-project.org/src/contrib/mixhvg_1.0.1.tar.gz
+  - https://cran.r-project.org/src/contrib/Archive/mixhvg/mixhvg_1.0.1.tar.gz
+  sha256: b1cde12dd71e8b0d1eac9cabb650c6a8d7f684af5a08aebaeece959e659981d8
+
+build:
+  number: ${{ build_number }}
+  script:
+    - if: win
+      then: R CMD INSTALL --build . %R_ARGS%
+      else: R CMD INSTALL --build . ${R_ARGS}
+  noarch: generic
+
+requirements:
+  host:
+    - r-base >=4.0.0
+    - r-seurat
+    - r-matrix
+    - bioconductor-scran
+    - bioconductor-scuttle
+    - bioconductor-singlecellexperiment
+  run:
+    - r-base >=4.0.0
+    - r-seurat
+    - r-matrix
+    - bioconductor-scran
+    - bioconductor-scuttle
+    - bioconductor-singlecellexperiment
+
+tests:
+- script:
+  - Rscript -e 'library("mixhvg")'
+- script:
+  - Rscript -e 'library("mixhvg"); stopifnot(exists("FindVariableFeaturesMix"))'
+
+about:
+  homepage: https://cran.r-project.org/package=mixhvg
+  summary: Mixture of Multiple Highly Variable Feature Selection Methods
+  description: |-
+    Highly variable gene selection methods, including popular public
+    available methods, and also the mixture of multiple highly variable
+    gene selection methods. Reference: Zhao et al. (2024)
+    <doi:10.1101/2024.08.25.608519>.
+  license: GPL-3.0-only
+  repository: https://github.com/RuzhangZhao/mixhvg
