@@ -1,0 +1,50 @@
+context:
+  name: scconvert
+  # The scConvert R package's standalone C CLI (src/Makefile.cli), at the commit omni-scformats
+  # benchmarks: 41 commits past the v0.2.1 tag. The R package itself is not in this recipe.
+  version: "0.2.1.post41"
+  git_rev: ecab18f99a781f0d0b13a73847ce72e57d8c612a
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/mianaz/scConvert/archive/${{ git_rev }}.tar.gz
+  sha256: 33d2c1fe04946fd029fe641f1e302d8c81d4956136abeb6ef61a4851f153a504
+
+build:
+  number: 0
+  # ponytail: linux + osx only; Makefile.cli has a mingw branch, untested here
+  skip:
+    - win
+  script:
+    - cd src
+    # pkg-config finds conda's hdf5; CFLAGS keeps upstream's flags and adds conda's.
+    # _DEFAULT_SOURCE: main.c calls realpath(), which strict -std=c11 + _POSIX_C_SOURCE leaves
+    # undeclared; GCC >= 14 makes the implicit declaration an error (upstream builds with older GCC).
+    - make -f Makefile.cli CC="$CC" CFLAGS="$CFLAGS -O2 -std=c11 -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE" LDFLAGS="$LDFLAGS"
+    - make -f Makefile.cli install PREFIX=$PREFIX
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - make
+    - pkg-config
+  host:
+    - hdf5
+    - zlib
+
+tests:
+  - script:
+      - scconvert --help || test $? -le 1
+
+about:
+  homepage: https://github.com/mianaz/scConvert
+  repository: https://github.com/mianaz/scConvert
+  license: GPL-3.0-only  # DESCRIPTION: GPL-3
+  license_file: LICENSE
+  summary: Streaming h5ad <-> h5seurat converter (scConvert's C command-line tool)
+  description: |
+    `scconvert IN OUT`: the standalone C binary from the scConvert R package (src/Makefile.cli),
+    streaming between AnnData .h5ad and Seurat .h5seurat (plus h5mu, loom, zarr) with libhdf5.

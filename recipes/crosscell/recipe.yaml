@@ -1,0 +1,51 @@
+context:
+  name: crosscell
+  # The commit the CrossCell paper's benchmark ran ("v0.1.0: paper revision"), 9 commits past
+  # the v0.1.0 tag; omni-scformats benchmarks this build.
+  version: "0.1.0.post9"
+  git_rev: af3ea574ce38d6df515a82a3548b640856bff3df
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/biodancerwangzhi/crosscell/archive/${{ git_rev }}.tar.gz
+  sha256: 95186313e240f897e66182e1b7f68d8eddcdfc598e1e112db9d5ef1c1222a510
+
+build:
+  number: 0
+  # ponytail: linux + osx only; win untested
+  skip:
+    - win
+  script:
+    # Upstream default feature hdf5-static: hdf5-metno-src builds HDF5 2.0.0 with cmake and links it
+    # statically, as the paper's prebuilt binary does. Cargo fetches crates at build time (network).
+    - unset CARGO_BUILD_TARGET
+    - cargo install --locked --path . --bin crosscell --root $PREFIX
+    - rm -f $PREFIX/.crates.toml $PREFIX/.crates2.json
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('rust') }}
+    - cmake
+    - make
+
+tests:
+  - script:
+      - crosscell --version
+      - crosscell --help
+
+about:
+  homepage: https://github.com/biodancerwangzhi/crosscell
+  repository: https://github.com/biodancerwangzhi/crosscell
+  license: MIT OR Apache-2.0
+  license_file:
+    - LICENSE-MIT
+    - LICENSE-APACHE
+  summary: H5AD <-> Seurat RDS converter for single-cell data (CLI), at the paper's commit
+  description: |
+    CrossCell's `crosscell` binary: converts AnnData .h5ad to Seurat .rds and back without R or
+    Python at runtime. Built from the commit its paper's benchmark used, with HDF5 compiled in.
