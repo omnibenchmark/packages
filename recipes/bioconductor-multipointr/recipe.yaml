@@ -1,0 +1,67 @@
+context:
+  version: "0.99.13"
+  commit: "8c6456b1507073e2362119d2eb24ecc02c28bce0"
+
+package:
+  name: bioconductor-multipointr
+  version: ${{ version }}
+
+source:
+  # newest build from GitHub; switch to the bioconductor.org URL once the package is accepted
+  url: https://github.com/mjemons/multipointR/archive/${{ commit }}.tar.gz
+  sha256: 52e6f0b752f1f80ff089f743f22041b45e09d9d0d68023e49f79c7839ff4b483
+
+build:
+  number: 0
+  noarch: generic
+  script: R CMD INSTALL --build .
+
+requirements:
+  host:
+    - r-base >=4.1.0
+    - bioconductor-summarizedexperiment
+    - bioconductor-spatialexperiment
+    - bioconductor-s4vectors
+    - r-spatstat.geom
+    - r-spatstat.model
+    - r-spatstat.explore
+    - r-formula.tools
+    - r-mgcv
+    - r-dplyr
+    - r-ggplot2
+    - r-reformulas
+    - r-rlang
+
+  run:
+    - r-base >=4.1.0
+    - bioconductor-summarizedexperiment
+    - bioconductor-spatialexperiment
+    - bioconductor-s4vectors
+    - r-spatstat.geom
+    - r-spatstat.model
+    - r-spatstat.explore
+    - r-formula.tools
+    - r-mgcv
+    - r-dplyr
+    - r-ggplot2
+    - r-reformulas
+    - r-rlang
+
+tests:
+  - script:
+      - R -e "library(multipointR)"
+
+about:
+  homepage: https://github.com/mjemons/multipointR
+  repository: https://github.com/mjemons/multipointR
+  license: GPL-3.0-or-later
+  summary: Compare intensities of point patterns across samples with spatial parametric models
+  description: |
+    multipointR compares the distribution of cells within or across images using point
+    process models. For a single image, point process models (ppm) model the spatial
+    distribution of a cell type point pattern as a function of spatial covariates, while
+    accounting for the natural spacing of cells. The main model class is inhomogeneous
+    Gibbs point process models. Across multiple images, users can compare several
+    univariate ppm models or fit one joint model across all images with mppm.
+    multipointR provides an interface to SpatialExperiment and SpatialFeatureExperiment
+    objects and lets users define their own ppm/mppm models with R's formula interface.
