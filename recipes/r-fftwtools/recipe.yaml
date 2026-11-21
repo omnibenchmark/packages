@@ -1,0 +1,51 @@
+package:
+  name: r-fftwtools
+  version: 0.9_11
+
+source:
+  url:
+    - https://cran.r-project.org/src/contrib/fftwtools_0.9-11.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/fftwtools/fftwtools_0.9-11.tar.gz
+  sha256: f1f0c9a9086c7b2f72c5fb0334717cc917213a004eaef8448eab4940c9852c7f
+
+build:
+  number: 0
+  script:
+    - R CMD INSTALL --build .
+  dynamic_linking:
+    rpaths:
+      - lib/R/lib/
+      - lib/
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - pkg-config
+    - make
+  host:
+    - r-base
+    - fftw
+  run:
+    - r-base
+
+tests:
+  - script:
+      - Rscript -e 'library("fftwtools")'
+
+about:
+  homepage: https://github.com/krahim/fftwtools
+  summary: |-
+    Wrapper for 'FFTW3' Includes: One-Dimensional, Two-Dimensional,
+    Three-Dimensional, and Multivariate Transforms
+  description: |-
+    Provides a wrapper for several 'FFTW' functions. This
+    package provides access to the two-dimensional 'FFT', the
+    multivariate 'FFT', and the one-dimensional real to complex
+    'FFT' using the 'FFTW3' library. The package includes the
+    functions fftw() and mvfftw() which are designed to mimic the
+    functionality of the R functions fft() and mvfft(). The 'FFT'
+    functions have a parameter that allows them to not return the
+    redundant complex conjugate when the input is real data.
+  license: GPL-2.0-or-later
+  repository: https://github.com/cran/fftwtools
+
