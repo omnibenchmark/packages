@@ -1,0 +1,66 @@
+context:
+  name: bioconductor-sosta
+  version: "1.5.2"
+  commit: "ffd7552a23b9ef248e50300490c8df8e4ee18598"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/sgunz/sosta/archive/${{ commit }}.tar.gz
+  sha256: d4a91a646875ecabae19788a42f9b27843a6b60564cc5fb28d591e11a1f69e43
+
+build:
+  number: 0
+  noarch: generic
+  script: R CMD INSTALL --build . ${R_ARGS}
+
+requirements:
+  host:
+    - r-base >=4.3
+    - r-dplyr
+    - r-ggplot2
+    - r-terra
+    - r-sf
+    - r-smoothr
+    - bioconductor-spatialexperiment
+    - r-spatstat.explore
+    - r-spatstat.geom
+    - bioconductor-summarizedexperiment
+    - r-patchwork
+    - bioconductor-ebimage
+    - r-spatstat.random
+    - bioconductor-s4vectors
+
+  run:
+    - r-base >=4.3
+    - r-dplyr
+    - r-ggplot2
+    - r-terra
+    - r-sf
+    - r-smoothr
+    - bioconductor-spatialexperiment
+    - r-spatstat.explore
+    - r-spatstat.geom
+    - bioconductor-summarizedexperiment
+    - r-patchwork
+    - bioconductor-ebimage
+    - r-spatstat.random
+    - bioconductor-s4vectors
+
+tests:
+  - script:
+      - R -e "library(sosta)"
+
+about:
+  homepage: https://github.com/sgunz/sosta
+  license: GPL-3.0-or-later
+  summary: A package for the analysis of anatomical tissue structures in spatial omics data
+  description: |
+    sosta (Spatial Omics STructure Analysis) is a package for analyzing
+    spatial omics data to explore tissue organization at the anatomical structure level.
+    It reconstructs anatomically relevant structures based on molecular features 
+    or cell types. It further calculates a range of metrics at the structure level
+    to quantitatively describe tissue architecture. The package is designed to integrate 
+    with other packages for the analysis of spatial omics data.
