@@ -77,7 +77,7 @@ jobs:
         platform:
           - os: ubuntu-latest
             target: linux-64
-          - os: macos-14  # M1/M2 — native osx-arm64
+          - os: macos-latest  # M1/M2 — native osx-arm64
             target: osx-arm64
           - os: windows-latest
             target: win-64
