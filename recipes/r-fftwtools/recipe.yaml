@@ -22,7 +22,6 @@ requirements:
     - ${{ compiler('c') }}
     - pkg-config
     - make
-    number: 1
   host:
     - r-base 4.5.*
     - fftw
