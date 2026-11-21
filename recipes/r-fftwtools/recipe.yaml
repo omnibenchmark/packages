@@ -47,7 +47,5 @@ about:
     functions have a parameter that allows them to not return the
     redundant complex conjugate when the input is real data.
   license: GPL-2.0-or-later
-  license_file:
-  - ${{ PREFIX }}/lib/R/share/licenses/GPL-2
   repository: https://github.com/cran/fftwtools
 
