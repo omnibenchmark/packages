@@ -23,7 +23,7 @@ requirements:
     - pkg-config
     - make
   host:
-    - r-base
+    - r-base 4.5.*
     - fftw
   run:
     - r-base
