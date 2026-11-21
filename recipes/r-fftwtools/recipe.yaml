@@ -9,7 +9,7 @@ source:
   sha256: f1f0c9a9086c7b2f72c5fb0334717cc917213a004eaef8448eab4940c9852c7f
 
 build:
-  number: 0
+  number: 1
   script:
     - R CMD INSTALL --build .
   dynamic_linking:
@@ -22,6 +22,7 @@ requirements:
     - ${{ compiler('c') }}
     - pkg-config
     - make
+    number: 1
   host:
     - r-base 4.5.*
     - fftw
